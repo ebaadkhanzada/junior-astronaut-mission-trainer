@@ -4,7 +4,7 @@ A browser game for ages 7 to 12. Land on the Moon (Shackleton Crater rim) or Mar
 
 Built for NASA's hackathon challenge **Build a Junior Astronaut Mission Trainer**.
 
-**Play it:** `<paste your GitHub Pages link here>`  |  **Demo video:** `<paste link here>`
+**Play it:** `https://ebaadkhanzada.github.io/junior-astronaut-mission-trainer/`
 
 ## Run it
 
@@ -71,9 +71,16 @@ Dates and sunspot regions for 6 Sep 2017, 10 Sep 2017, 3 Oct 2024, 9 Aug 2011, 1
 
 | Name | Role | Main contributions |
 |---|---|---|
-| `<name>` | `<role>` | `<what they actually did>` |
-| `<name>` | `<role>` | `<what they actually did>` |
-| `<name>` | `<role>` | `<what they actually did>` |
+|ebaad | lead developer | Game design and architecture; simulation engine; canvas graphics and movement; HUD, sound and live NASA DONKI connection; difficulty modes; deployment, code review and merging; slides|
+|shayan |Data and gameplay-balance developer |Add 3 to 5 more real solar events to the ARCHIVE array in js/data.js, using the same fields as the existing ones and verifying each against NASA DONKI first.
+Add 8 to 10 new kid-friendly facts to TIPS in js/data.js.
+Write tests/data-check.js, a Node script that checks every ARCHIVE entry has a date, class and region, that dates are valid, and that MODES numbers are sensible. Run it with node tests/data-check.js.
+Run node tests/balance-bot.js 40, and if Hard is too easy or too hard, adjust the MODES numbers in js/data.js and record before and after results in docs/DATA_SOURCES.md.|
+| Ali| Interface and quality developer | 
+Improve the phone layout in css/style.css (HUD spacing, button sizes of at least 44px, text that doesn’t overflow).
+Add accessibility CSS: a prefers-reduced-motion rule, a visible keyboard focus outline, and sufficient colour contrast on the meters.
+Write tests/smoke-test.js, a small Playwright script that opens index.html, starts a mission and checks the page title and that there are no console errors.
+Fix any visual bugs found during playtesting and mention each one in its commit message.` |
 
 Fill this in honestly from the Git history and Issues.
 
