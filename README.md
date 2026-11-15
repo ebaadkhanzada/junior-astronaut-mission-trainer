@@ -44,7 +44,7 @@ Every action costs something. Power comes from solar panels only in daylight and
 
 Replayability: every mission has a code (for example `MH-4821`). The same code gives the same storms and rock sites. "Today's mission" gives everyone the same seed on a given day.
 
-## Real NASA data used
+## Real NASA data used:
 
 | Source | How it is used | Status |
 |---|---|---|
