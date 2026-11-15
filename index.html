@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Junior Astronaut Mission Trainer</title>
+<meta name="description" content="A browser game for ages 7 to 12. Land on the Moon or Mars and keep your crew alive using real NASA solar storm data.">
+<meta name="theme-color" content="#0B1220">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23131C2E' stroke='%23FF6A2B' stroke-width='5'/%3E%3Cellipse cx='32' cy='32' rx='26' ry='10' fill='none' stroke='%23A3B0C7' stroke-width='3' transform='rotate(-25 32 32)'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23EAF0F8'/%3E%3Ccircle cx='51' cy='19' r='4' fill='%23FF6A2B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+ <section id="menu">
+  <div class="wrap">
+   <div class="top"><div class="brand"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13.5" fill="#131C2E" stroke="#FF6A2B" stroke-width="2"/><ellipse cx="15" cy="15" rx="12" ry="4.5" fill="none" stroke="#A3B0C7" stroke-width="1.2" transform="rotate(-25 15 15)"/><circle cx="15" cy="15" r="5" fill="#EAF0F8"/><circle cx="23" cy="9" r="1.8" fill="#FF6A2B"/></svg><span>JUNIOR ASTRONAUT MISSION TRAINER</span></div></div>
+   <div class="hero"><span class="label">NASA open data · for ages 7 to 12</span>
+    <h1>Land on the Moon or Mars. Keep your crew alive.</h1>
+    <p>You are the mission lead. Your crewmates Amira and Leo are resting after landing, so you do the work: walk your astronaut around the outpost and manage battery, air, food, radiation and science with your own clicks. Every choice costs something.</p>
+    <span class="badge" id="liveBadge"></span></div>
+   <div class="setup">
+    <div class="grp"><span class="label">1. Pick your world</span><div class="picks" id="siteBtns"></div></div>
+    <div class="grp"><span class="label">2. Pick your difficulty</span><div class="picks" id="modeBtns"></div></div>
+    <div class="grp"><span class="label">3. Launch</span>
+     <div class="opts"><label><input type="checkbox" id="hintsChk"> Show Mission Control hints</label>
+      <label>Mission code <input type="text" id="codeIn" maxlength="9" placeholder="MH-4821" aria-label="Mission code"></label></div>
+     <div class="grp"><span class="label">Optional: connect live NASA data</span>
+      <div class="opts"><label>NASA API key <input type="password" id="apiIn" autocomplete="off" spellcheck="false" placeholder="paste your key here" aria-label="NASA API key"></label><button class="btn ghost small" data-act="apikey">Connect</button><button class="btn ghost small" data-act="apiforget" id="apiForget" hidden>Forget key</button><a href="https://api.nasa.gov/" target="_blank" rel="noopener">Get a free key</a></div>
+      <p class="muted" id="apiState" style="font-size:14px"></p></div>
+     <div class="row-actions"><button class="btn big" data-act="launch">Launch mission</button><button class="btn ghost" data-act="daily">Today’s mission</button></div>
+     <p class="muted" style="font-size:14px">Today’s mission gives everyone the same storms on the same day. A mission code replays a mission exactly.</p></div>
+   </div>
+   <section class="sec"><h2>How to play</h2><ul class="howto">
+    <li><b>Walk</b><span>Click or tap the ground to walk there. Or use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or the arrow keys.</span></li>
+    <li><b>Work</b><span>Click a glowing machine to walk to it and use it. Or stand close and press <kbd>E</kbd>. Clean dust, grab rocks, run experiments, grow food.</span></li>
+    <li><b>Power is tight</b><span>Solar panels only work in daylight. The scrubber, grow lights, radio and lab all use battery. Turn things off to save it.</span></li>
+    <li><b>Storms are real</b><span>Each mission replays real solar storms from NASA’s records. Keep the radio on to hear warnings, then run to the Storm Cellar.</span></li>
+   </ul></section>
+   <div id="dataSlot"></div>
+   <p class="muted" style="margin-top:28px;font-size:14px">Built for NASA’s Junior Astronaut Mission Trainer challenge. Real data sources are credited above and again after every mission.</p>
+  </div>
+ </section>
+
+ <section id="play" hidden>
+  <div class="stage" id="stage">
+   <canvas id="cv" aria-label="Game view of the outpost. Use the keyboard or tap to move your astronaut."></canvas>
+   <div id="hud" hidden>
+    <div class="meters" id="meters"></div>
+    <div class="topr"><div class="clock" id="clock"></div><button class="sbtn" id="bTasks" data-act="tasks">Tasks</button><button class="sbtn" id="bSound" data-act="sound" aria-pressed="true">Sound on</button><button class="sbtn" id="bPause" data-act="pause">Pause</button></div>
+    <div class="tasks" id="tasks"></div>
+    <div class="alert" id="alert" hidden></div>
+    <div class="hint" id="hint" hidden></div>
+    <div class="actbar" id="actbar" hidden><span></span><div class="bar"><i></i></div></div>
+    <div id="toasts" aria-live="polite"></div>
+   </div>
+   <div id="cineWrap" hidden><div id="cineText"></div><button class="sbtn" data-act="skip">Skip ▸</button></div>
+   <div class="ov" id="pause" hidden><div class="card stack"><h2>Paused</h2><p class="muted">The mission clock has stopped.</p><button class="btn" data-act="resume">Resume</button><button class="btn ghost" data-act="restart">Restart this mission</button><button class="btn ghost" data-act="quit">Quit to main screen</button></div></div>
+  </div>
+  <div class="keys"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or click to walk</span><span><kbd>E</kbd> use what is next to you</span><span><kbd>P</kbd> pause</span><span><kbd>M</kbd> sound</span></div>
+ </section>
+
+ <section id="debrief" hidden></section>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
